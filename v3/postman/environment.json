@@ -4,27 +4,27 @@
   "values": [
     {
       "key": "serviceUrl",
-      "value": "",
+      "value": "158.160.48.83",
       "enabled": true
     },
     {
       "key": "identityProviderUrl",
-      "value": "",
+      "value": "51.250.8.85:8080",
       "enabled": true
     },
     {
       "key": "username",
-      "value": "",
+      "value": "user1",
       "enabled": true
     },
     {
       "key": "password",
-      "value": "",
+      "value": "user1",
       "enabled": true
     },
     {
       "key": "clientId",
-      "value": "",
+      "value": "login-app",
       "enabled": true
     },
     {

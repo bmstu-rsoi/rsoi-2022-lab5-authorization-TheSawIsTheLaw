@@ -71,12 +71,15 @@
 							]
 						},
 						"url": {
-							"raw": "{{identityProviderUrl}}/oauth/token",
+							"raw": "{{identityProviderUrl}}/realms/SpringBootKeycloak/protocol/openid-connect/token",
 							"host": [
 								"{{identityProviderUrl}}"
 							],
 							"path": [
-								"oauth",
+								"realms",
+								"SpringBootKeycloak",
+								"protocol",
+								"openid-connect",
 								"token"
 							]
 						}
