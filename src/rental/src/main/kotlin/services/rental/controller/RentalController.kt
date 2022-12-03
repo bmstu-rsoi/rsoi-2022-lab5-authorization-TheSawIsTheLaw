@@ -39,7 +39,7 @@ class RentalController {
 
     @GetMapping("/")
     fun getRentals(@RequestHeader("Authorization") jwt: String?): ResponseEntity<Array<StupidRental>> {
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
         return ResponseEntity.ok(RentalRepository.get(username))
     }
 

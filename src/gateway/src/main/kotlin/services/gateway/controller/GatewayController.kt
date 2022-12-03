@@ -149,7 +149,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
         @RequestParam("showAll", required = false, defaultValue = "false") showAll: Boolean
     ): ResponseEntity<CarsResponse> {
 
-        if (JwtUtils.getUser(jwt) == null) {
+        if (JwtUtils.getUser(jwt?.removePrefix("Bearer ")) == null) {
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
 
@@ -183,7 +183,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
     @GetMapping("/rental")
     fun getRentals(@RequestHeader("Authorization") jwt: String?) : ResponseEntity<Any> {
 
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         if (CircuitBreaker.shouldThrowInternalOnCall(CircuitBreaker.Service.RENTAL)) {
             return ResponseEntity("Rental Service unavailable", HttpStatus.SERVICE_UNAVAILABLE)
@@ -249,7 +249,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
         @RequestBody reservation: RentalReservation
     ) : ResponseEntity<Any> {
 
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         val cars = getCars(true).body ?: return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build()
         val car = cars.findLast { it.carUid == reservation.carUid } ?: return ResponseEntity.notFound().build()
@@ -367,7 +367,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
         @PathVariable("rentalUid") rentalUid: UUID
     ): ResponseEntity<RentalResponse> {
 
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         val rental = getRental(rentalUid) ?: return ResponseEntity.notFound().build()
 
@@ -406,7 +406,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
         @PathVariable rentalUid: UUID
     ): ResponseEntity<*> {
 
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity<String>(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity<String>(HttpStatus.UNAUTHORIZED)
 
         val rental = getRental(rentalUid) ?: return ResponseEntity("lol what", HttpStatus.NOT_FOUND)
 
@@ -439,7 +439,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
         @PathVariable rentalUid: UUID
     ): ResponseEntity<String> {
 
-        val username = JwtUtils.getUser(jwt) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
     val rental = getRental(rentalUid) ?: return ResponseEntity("lol man", HttpStatus.NOT_FOUND)
 
