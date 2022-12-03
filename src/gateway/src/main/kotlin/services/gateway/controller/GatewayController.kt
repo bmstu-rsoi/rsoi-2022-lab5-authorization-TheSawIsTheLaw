@@ -183,7 +183,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
     @GetMapping("/rental")
     fun getRentals(@RequestHeader("Authorization") jwt: String?) : ResponseEntity<Any> {
 
-        val username = JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        JwtUtils.getUser(jwt?.removePrefix("Bearer ")) ?: return ResponseEntity(HttpStatus.UNAUTHORIZED)
 
         if (CircuitBreaker.shouldThrowInternalOnCall(CircuitBreaker.Service.RENTAL)) {
             return ResponseEntity("Rental Service unavailable", HttpStatus.SERVICE_UNAVAILABLE)
@@ -203,7 +203,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
                     CircuitBreaker.serviceFailure(CircuitBreaker.Service.RENTAL)
                     ResponseEntity("Rental Service unavailable", HttpStatus.SERVICE_UNAVAILABLE)
                 } else {
-                    getRentals(username)
+                    getRentals(jwt)
                 }
             }
             else {
@@ -432,7 +432,7 @@ class GatewayController @Autowired constructor(val queueKeeper: QueueKeeper) {
 
         return ResponseEntity("...", HttpStatus.NO_CONTENT)
     }
-//
+
     @DeleteMapping("/rental/{rentalUid}")
     fun cancelRent(
         @RequestHeader("Authorization") jwt: String?,
